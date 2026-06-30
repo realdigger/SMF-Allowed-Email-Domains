@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+	<name>Allowed Email Domains</name>
+	<id>digger:allowed-email-domains</id>
+	<type>modification</type>
+	<version>1.5.2</version>
+
+	<install for="2.0.*">
+		<readme parsebbc="false">readme.txt</readme>
+		<readme lang="russian" parsebbc="false">readme_smf20.russian.txt</readme>
+		<readme lang="russian-utf8" parsebbc="false">readme_smf20.russian-utf8.txt</readme>
+		<require-file name="Sources/AllowedEmailDomains.php" destination="$sourcedir" />
+		<require-file name="Common/Themes/default/languages/AllowedEmailDomains.english.php" destination="$languagedir" />
+		<require-file name="SMF20/Themes/default/languages/AllowedEmailDomains.russian.php" destination="$languagedir" />
+		<require-file name="SMF20/Themes/default/languages/AllowedEmailDomains.russian-utf8.php" destination="$languagedir" />
+		<code>install.php</code>
+		<redirect url="$scripturl?action=admin;area=allowedemaildomains" timeout="10000" />
+	</install>
+
+	<install for="2.1.*">
+		<readme parsebbc="false">readme.txt</readme>
+		<readme lang="russian" parsebbc="false">readme_smf21.russian.txt</readme>
+		<require-file name="Sources/AllowedEmailDomains.php" destination="$sourcedir" />
+		<require-file name="Common/Themes/default/languages/AllowedEmailDomains.english.php" destination="$languagedir" />
+		<require-file name="SMF21/Themes/default/languages/AllowedEmailDomains.russian.php" destination="$languagedir" />
+		<code>install.php</code>
+		<redirect url="$scripturl?action=admin;area=allowedemaildomains" timeout="10000" />
+	</install>
+
+
+
+	<uninstall for="2.0.*">
+		<readme parsebbc="false">readme.txt</readme>
+		<code>uninstall.php</code>
+		<remove-file name="$sourcedir/AllowedEmailDomains.php" />
+		<remove-file name="$languagedir/AllowedEmailDomains.english.php" />
+		<remove-file name="$languagedir/AllowedEmailDomains.russian.php" />
+		<remove-file name="$languagedir/AllowedEmailDomains.russian-utf8.php" />
+	</uninstall>
+
+	<uninstall for="2.1.*">
+		<readme parsebbc="false">readme.txt</readme>
+		<code>uninstall.php</code>
+		<remove-file name="$sourcedir/AllowedEmailDomains.php" />
+		<remove-file name="$languagedir/AllowedEmailDomains.english.php" />
+		<remove-file name="$languagedir/AllowedEmailDomains.russian.php" />
+	</uninstall>
+</package-info>
