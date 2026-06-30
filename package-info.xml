@@ -4,7 +4,7 @@
 	<name>Allowed Email Domains</name>
 	<id>digger:allowed-email-domains</id>
 	<type>modification</type>
-	<version>1.5.2</version>
+	<version>1.5.3</version>
 
 	<install for="2.0.*">
 		<readme parsebbc="false">readme.txt</readme>

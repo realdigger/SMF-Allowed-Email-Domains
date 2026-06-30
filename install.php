@@ -38,6 +38,7 @@ function aed_install_hooks($install)
 	$defaults = array(
 		'aed_enabled' => 0,
 		'aed_log_enabled' => 0,
+		'aed_custom_error_message' => '',
 		'aed_allowed_domains' => '',
 		'aed_allowed_tlds' => '',
 		'aed_denied_domains' => '',

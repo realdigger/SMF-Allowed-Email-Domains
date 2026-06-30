@@ -9,6 +9,8 @@ if (!defined('SMF'))
 $txt['aed_admin_title'] = 'Allowed Email Domains';
 $txt['aed_enabled'] = 'Enable email domain restrictions';
 $txt['aed_enabled_desc'] = 'When enabled, user registration and users\' own profile email changes are allowed only for the domains configured below. Denied domains and denied TLDs override allowed entries.';
+$txt['aed_custom_error_message'] = 'Custom blocked-domain message';
+$txt['aed_custom_error_message_desc'] = 'Optional. This text is shown to users when their email domain is not allowed. Leave empty to use the standard language-file message. Supported placeholders: {email}, {domain}, {tld}.';
 $txt['aed_allowed_domains'] = 'Allowed mail domains';
 $txt['aed_allowed_domains_desc'] = 'Enter one full domain per line, for example: example.com or company.org. These entries match the email domain exactly.';
 $txt['aed_allowed_tlds'] = 'Allowed top-level domains';
@@ -31,6 +33,7 @@ $txt['aed_test_allowed_domain'] = 'Allowed: domain &quot;%s&quot; is in the allo
 $txt['aed_test_allowed_tld'] = 'Allowed: TLD &quot;%s&quot; for domain &quot;%s&quot; is in the allowed TLD list.';
 $txt['aed_test_blocked_no_match'] = 'Blocked: domain &quot;%s&quot; is not in the allowed mail domains list, and TLD &quot;%s&quot; is not in the allowed TLD list.';
 $txt['aed_test_blocked_no_match_no_tld'] = 'Blocked: domain &quot;%s&quot; is not in the allowed mail domains list and has no usable TLD match.';
+$txt['aed_test_user_message'] = 'Message shown to the user: %s';
 
 $txt['aed_log_enabled'] = 'Log registration and profile email-change attempts';
 $txt['aed_log_enabled_desc'] = 'When enabled, every registration attempt and every profile email change handled by this mod is written to the <a href="%1$s">filtered forum error log for this mod</a>.';

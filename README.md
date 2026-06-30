@@ -11,7 +11,7 @@
 - **Compatible with:** SMF 2.0, SMF 2.1
 - **Languages:** English, Russian
 - **Core edits:** none, integration hooks only
-- **Current package version:** 1.5.2
+- **Current package version:** 1.5.3
 
 Allowed Email Domains is an SMF package that restricts user registration and profile email changes by email domain.
 
@@ -41,6 +41,7 @@ The package works via SMF integration hooks only and does not modify the forum s
 - Deny specific full email domains, for example `badmail.com`.
 - Deny complete top-level domains, for example `xyz`, `top`, `click`.
 - Built-in email tester on the settings page.
+- Custom user-facing blocked-domain message with fallback to the language-file message.
 - Optional logging of registration and profile email-change attempts to the standard forum error log.
 - Quick link from settings to the filtered error-log section for this mod.
 
@@ -74,9 +75,10 @@ Settings:
 - Allowed top-level domains: one TLD per line.
 - Denied mail domains: one full domain per line.
 - Denied top-level domains: one TLD per line.
+- Custom blocked-domain message shown to users. Leave empty to use the standard language-file message. Placeholders: `{email}`, `{domain}`, `{tld}`.
 - Log registration and profile email-change attempts.
 
-The settings page also contains a test field. Enter an email address and the package will show the result directly below the input field: allowed or blocked by the currently saved settings, including the reason.
+The settings page also contains a test field. Enter an email address and the package will show the result directly below the input field: allowed or blocked by the currently saved settings, including the reason and the final user-facing message for blocked emails.
 
 When logging is enabled, attempts are stored in SMF's standard `log_errors` table with the custom type `aed_email`. They can be viewed through the standard error log filtered by this mod type:
 
@@ -110,6 +112,7 @@ Admin -> Logs -> Error Log -> Allowed Email Domains
 - Список запрещённых полных почтовых доменов, например `badmail.com`.
 - Список запрещённых доменов первого уровня, например `xyz`, `top`, `click`.
 - Встроенная проверка email на странице настроек.
+- Своё сообщение пользователю при блокировке с возвратом к стандартному сообщению из языкового файла, если поле пустое.
 - Вывод причины результата проверки: разрешён, заблокирован по домену, заблокирован по домену первого уровня, нет совпадения с разрешающими правилами и т.п.
 - Опциональное логирование попыток регистрации и смены email в стандартный лог ошибок форума.
 - Быстрая ссылка из настроек на раздел лога ошибок с фильтром по этому моду.
@@ -144,9 +147,10 @@ Admin -> Logs -> Error Log -> Allowed Email Domains
 - разрешённые домены первого уровня: по одному домену первого уровня на строку;
 - запрещённые почтовые домены: по одному полному домену на строку;
 - запрещённые домены первого уровня: по одному домену первого уровня на строку;
+- своё сообщение пользователю при блокировке. Если поле пустое, используется стандартное сообщение из языкового файла. Можно использовать подстановки `{email}`, `{domain}`, `{tld}`;
 - включить логирование попыток регистрации и смены email.
 
-На странице настроек есть тестовое поле. Введите email, и мод покажет результат проверки прямо под полем ввода. Проверка выполняется по текущим сохранённым настройкам.
+На странице настроек есть тестовое поле. Введите email, и мод покажет результат проверки прямо под полем ввода. Проверка выполняется по текущим сохранённым настройкам. Для заблокированного адреса также выводится итоговое сообщение, которое будет показано пользователю.
 
 ## Логирование
 

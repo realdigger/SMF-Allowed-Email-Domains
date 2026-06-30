@@ -7,7 +7,7 @@
  * lists that override allowed entries. Works via SMF integration hooks.
  *
  * @package AllowedEmailDomains
- * @version 1.5.2
+ * @version 1.5.3
  */
 
 if (!defined('SMF'))
@@ -111,6 +111,7 @@ function aed_admin_settings()
 	$config_vars = array(
 		array('check', 'aed_enabled', 'subtext' => $txt['aed_enabled_desc']),
 		array('check', 'aed_log_enabled', 'subtext' => $aed_log_desc),
+		array('large_text', 'aed_custom_error_message', 3, 'subtext' => $txt['aed_custom_error_message_desc']),
 		'',
 		array('large_text', 'aed_allowed_domains', 8, 'subtext' => $txt['aed_allowed_domains_desc']),
 		array('large_text', 'aed_allowed_tlds', 4, 'subtext' => $txt['aed_allowed_tlds_desc']),
@@ -130,6 +131,7 @@ function aed_admin_settings()
 	{
 		checkSession();
 
+		$_POST['aed_custom_error_message'] = isset($_POST['aed_custom_error_message']) ? trim(str_replace(array("\r\n", "\r"), "\n", $_POST['aed_custom_error_message'])) : '';
 		$_POST['aed_allowed_domains'] = isset($_POST['aed_allowed_domains']) ? aed_normalize_list($_POST['aed_allowed_domains'], false) : '';
 		$_POST['aed_allowed_tlds'] = isset($_POST['aed_allowed_tlds']) ? aed_normalize_list($_POST['aed_allowed_tlds'], true) : '';
 		$_POST['aed_denied_domains'] = isset($_POST['aed_denied_domains']) ? aed_normalize_list($_POST['aed_denied_domains'], false) : '';
@@ -472,47 +474,75 @@ function aed_build_test_result($email)
 	switch ($check['reason'])
 	{
 		case 'empty_domain':
-			return array(
+			$result = array(
 				'class' => 'errorbox',
 				'message' => sprintf($txt['aed_test_invalid'], aed_htmlspecialchars($email)),
 			);
+			break;
 
 		case 'disabled':
-			return array(
+			$result = array(
 				'class' => 'infobox',
 				'message' => sprintf($txt['aed_test_allowed_disabled'], aed_htmlspecialchars($domain)),
 			);
+			break;
 
 		case 'denied_domain':
-			return array(
+			$result = array(
 				'class' => 'errorbox',
 				'message' => sprintf($txt['aed_test_blocked_denied_domain'], aed_htmlspecialchars($domain)),
 			);
+			break;
 
 		case 'denied_tld':
-			return array(
+			$result = array(
 				'class' => 'errorbox',
 				'message' => sprintf($txt['aed_test_blocked_denied_tld'], aed_htmlspecialchars($tld), aed_htmlspecialchars($domain)),
 			);
+			break;
 
 		case 'allowed_domain':
-			return array(
+			$result = array(
 				'class' => 'infobox',
 				'message' => sprintf($txt['aed_test_allowed_domain'], aed_htmlspecialchars($domain)),
 			);
+			break;
 
 		case 'allowed_tld':
-			return array(
+			$result = array(
 				'class' => 'infobox',
 				'message' => sprintf($txt['aed_test_allowed_tld'], aed_htmlspecialchars($tld), aed_htmlspecialchars($domain)),
 			);
+			break;
 
 		default:
-			return array(
+			$result = array(
 				'class' => 'errorbox',
 				'message' => $tld === '' ? sprintf($txt['aed_test_blocked_no_match_no_tld'], aed_htmlspecialchars($domain)) : sprintf($txt['aed_test_blocked_no_match'], aed_htmlspecialchars($domain), aed_htmlspecialchars($tld)),
 			);
 	}
+
+	return aed_add_user_message_to_test_result($result, $email, $check);
+}
+
+/**
+ * Adds the final user-facing blocked-domain message to an admin test result.
+ *
+ * @param array $result Admin test result.
+ * @param string $email Email address.
+ * @param array $check Structured result from aed_check_email_against_settings().
+ * @return array
+ */
+function aed_add_user_message_to_test_result($result, $email, $check)
+{
+	global $txt;
+
+	if (!empty($check['allowed']) || empty($result['message']))
+		return $result;
+
+	$result['message'] .= '<br>' . sprintf($txt['aed_test_user_message'], aed_error_message($email));
+
+	return $result;
 }
 
 /**
@@ -523,15 +553,44 @@ function aed_build_test_result($email)
  */
 function aed_error_message($email)
 {
-	global $txt;
+	global $modSettings, $txt;
 
 	loadLanguage('AllowedEmailDomains');
 
 	$domain = aed_extract_email_domain($email);
-	if ($domain === '')
-		$domain = $email;
+	$display_domain = $domain === '' ? $email : $domain;
+	$custom_message = isset($modSettings['aed_custom_error_message']) ? trim((string) $modSettings['aed_custom_error_message']) : '';
 
-	return sprintf($txt['aed_email_domain_not_allowed'], aed_htmlspecialchars($domain));
+	if ($custom_message !== '')
+		return aed_format_custom_error_message($custom_message, $email, $display_domain, aed_extract_tld($domain));
+
+	return sprintf($txt['aed_email_domain_not_allowed'], aed_htmlspecialchars($display_domain));
+}
+
+/**
+ * Formats the admin-defined blocked-domain message for safe user display.
+ *
+ * Supported placeholders: {email}, {domain}, {tld}, %email%, %domain%, %tld%.
+ *
+ * @param string $message Custom message from settings.
+ * @param string $email Email address.
+ * @param string $domain Display domain.
+ * @param string $tld Top-level domain.
+ * @return string HTML-safe message.
+ */
+function aed_format_custom_error_message($message, $email, $domain, $tld)
+{
+	$message = str_replace(array("\r\n", "\r"), "\n", trim((string) $message));
+	$message = strtr($message, array(
+		'{email}' => trim((string) $email),
+		'{domain}' => trim((string) $domain),
+		'{tld}' => trim((string) $tld),
+		'%email%' => trim((string) $email),
+		'%domain%' => trim((string) $domain),
+		'%tld%' => trim((string) $tld),
+	));
+
+	return str_replace("\n", aed_is_smf21() ? '<br>' : '<br />', aed_htmlspecialchars($message));
 }
 
 /**

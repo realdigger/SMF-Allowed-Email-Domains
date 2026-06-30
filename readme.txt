@@ -1,4 +1,4 @@
-Allowed Email Domains 1.5.2
+Allowed Email Domains 1.5.3
 ===========================
 
 This SMF modification restricts user registration and profile email changes to:
@@ -28,10 +28,11 @@ Settings:
 3. Allowed top-level domains, one TLD per line, e.g. ru, com, org.
 4. Denied mail domains, one full domain per line, e.g. badmail.com.
 5. Denied top-level domains, one TLD per line, e.g. xyz, top, click.
-6. Log registration and profile email-change attempts.
+6. Custom blocked-domain message shown to users. Leave empty to use the standard language-file message. Supported placeholders: {email}, {domain}, {tld}.
+7. Log registration and profile email-change attempts.
 
 Built-in tester:
-The settings page includes a test field where an administrator can enter an email address and see whether it is allowed or blocked by the currently saved settings. The result is shown directly below the test email input field. The result includes the reason, such as denied full domain, denied TLD, allowed full domain, allowed TLD, disabled restrictions, or no allowed match.
+The settings page includes a test field where an administrator can enter an email address and see whether it is allowed or blocked by the currently saved settings. The result is shown directly below the test email input field. The result includes the reason, such as denied full domain, denied TLD, allowed full domain, allowed TLD, disabled restrictions, or no allowed match. For blocked emails, it also shows the message that would be displayed to the user.
 
 Compatibility:
 - SMF 2.0.x
