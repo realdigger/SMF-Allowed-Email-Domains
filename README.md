@@ -1,4 +1,5 @@
 [![GitHub release](https://img.shields.io/github/release/realdigger/SMF-Allowed-Email-Domains.svg)](https://github.com/realdigger/SMF-Allowed-Email-Domains/releases)
+[![GitHub downloads](https://img.shields.io/github/downloads/realdigger/SMF-Allowed-Email-Domains/total.svg)](https://github.com/realdigger/SMF-Allowed-Email-Domains/releases)
 [![SMF](https://img.shields.io/badge/SMF-2.0-blue.svg?style==flat)](https://simplemachines.org)
 [![SMF](https://img.shields.io/badge/SMF-2.1-blue.svg?style==flat)](https://simplemachines.org)
 [![Hooks](https://img.shields.io/badge/hooks%20only-✓-blue.svg?style==flat)]()
